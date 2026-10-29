@@ -1,0 +1,19 @@
+#!/bin/sh
+# /etc/hotplug.d/iface/99-campus-login
+# WAN 拨号成功 / 接口上线时立刻尝试登录一次（守护进程也会兜底）
+# 安装：cp 99-campus-login /etc/hotplug.d/iface/ && chmod +x /etc/hotplug.d/iface/99-campus-login
+
+[ "$ACTION" = "ifup" ] || exit 0
+case "$INTERFACE" in
+    wan|wwan|wan6|pppoe-wan|*wan*) : ;;
+    *) exit 0 ;;
+esac
+
+# 稍等 5 秒，等 DHCP/拨号完全就绪
+(
+    sleep 5
+    CAMPUS_CONF=/etc/campus-login.conf \
+    CAMPUS_LOG=/var/log/campus-login.log \
+    /usr/bin/campus-login.sh login >/dev/null 2>&1
+) &
+exit 0

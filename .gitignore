@@ -1,0 +1,14 @@
+# 运行产物
+*.log
+.campus-login.state
+.tmp.*
+
+# 填了真实密码的配置（只提交 *.example）
+config.ini
+campus-login.conf
+!*/config.ini.example
+!*/campus-login.conf.example
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
